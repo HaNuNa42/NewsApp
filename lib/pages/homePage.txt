@@ -1,0 +1,69 @@
+import 'package:flutter/material.dart';
+import 'package:hnn_news_app/ui/categories.dart';
+import 'package:hnn_news_app/ui/drawerPage.dart';
+import 'package:hnn_news_app/ui/viewModel.dart';
+
+class HomePage extends StatefulWidget {
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  HomeViewModel viewModel;
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.red[900],
+          title: buildSearchField,
+          actions: [buildIconButtonClose],
+        ),
+        drawer: DrawerPage(),
+        body: Container(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              child: Column(
+                children: [
+                  Categories(),
+                  Divider(
+                    color: Colors.grey,
+                  ),
+                  ListView.builder(
+                      itemCount: 15,
+                      shrinkWrap: true,
+                      itemBuilder: (a, b) => ListTile(
+                          title: Text(
+                            "başlık",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 18),
+                          ),
+                          subtitle: Text("alt başlık"),
+                          leading: Container(
+                            width: 75,
+                            height: 50,
+                            color: Colors.amber,
+                          )))
+                ],
+              ),
+            ),
+          ),
+        ));
+  }
+
+  TextField get buildSearchField {
+    return TextField(
+      // controller: viewModel.searchController,
+      decoration: InputDecoration(hintText: "Ara...", border: InputBorder.none),
+      onSubmitted: (String keyword) => viewModel.loadNews(keyword),
+    );
+  }
+
+  IconButton get buildIconButtonClose {
+    return IconButton(
+      onPressed: () => "test", // viewModel.resetNews(),
+      icon: Icon(Icons.close, color: Colors.black),
+    );
+  }
+}
