@@ -1,20 +1,31 @@
 import 'package:flutter/material.dart';
-
+import 'package:hnn_news_app/pages/favoritesPage.dart';
 import 'package:hnn_news_app/pages/loginPage.dart';
-import 'package:hnn_news_app/pages/newsDetails.dart';
 import 'package:hnn_news_app/pages/settings.dart';
 import 'package:hnn_news_app/ui/RSS.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 class DrawerPage extends StatefulWidget {
   final String mailState;
 
-  DrawerPage({Key key, this.mailState}) : super(key: key);
+  DrawerPage(Future<WebViewController> future, {Key key, this.mailState})
+      : super(key: key);
 
   @override
   _DrawerPageState createState() => _DrawerPageState();
 }
 
 class _DrawerPageState extends State<DrawerPage> {
+  final Function favoritesAccessor;
+
+  _DrawerPageState({this.favoritesAccessor});
+
+  @override
+  void initState() {
+    super.initState();
+    favoritesAccessor();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -73,13 +84,14 @@ class _DrawerPageState extends State<DrawerPage> {
             indent: 10,
           ),
           ListTile(
-            title: Text("Haber Detayı"),
-            leading: Icon(Icons.logout, color: Colors.grey),
-            onTap: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => NewsDetailsPage()));
-            },
-          ),
+              title: Text("Favori Haberlerim"),
+              leading: Icon(Icons.favorite, color: Colors.pink),
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (BuildContext context) {
+                  return FavoritesPage(favoritesAccessor());
+                }));
+              })
         ],
       ),
     );

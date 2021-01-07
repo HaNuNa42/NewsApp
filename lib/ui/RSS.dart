@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:hnn_news_app/pages/favoritesPage.dart';
+import 'package:hnn_news_app/pages/newsDetails.dart';
 import 'package:hnn_news_app/ui/drawerPage.dart';
 import 'package:mobx/mobx.dart';
 import 'package:webfeed/webfeed.dart';
@@ -7,11 +9,8 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 class RSSDemo extends StatefulWidget {
-  //
   RSSDemo() : super();
-
-  final String title = 'RSS Feed Demo';
-
+  final String title = 'News App';
   @override
   RSSDemoState createState() => RSSDemoState();
 }
@@ -29,6 +28,8 @@ class RSSDemoState extends State<RSSDemo> {
   GlobalKey<RefreshIndicatorState> _refreshKey;
   TextEditingController searchController;
   int page = 1;
+  final Function favoritesAccessor;
+  RSSDemoState({this.favoritesAccessor});
 
   updateTitle(title) {
     setState(() {
@@ -50,13 +51,10 @@ class RSSDemoState extends State<RSSDemo> {
 
   Future<void> openFeed(String url) async {
     if (await canLaunch(url)) {
-      await launch(
-        url,
-        forceSafariVC: false,
-        forceWebView: false,
-        headers: <String, String>{'my_header_key': _title},
-      );
-      return;
+      await launch(url = await Navigator.push(context,
+          MaterialPageRoute(builder: (BuildContext context) {
+        return NewsDetailsPage();
+      })));
     }
     updateTitle(feedOpenErrorMsg);
   }
@@ -196,7 +194,7 @@ class RSSDemoState extends State<RSSDemo> {
         actions: [buildIconButtonClose],
         //  title: Text(_title),
       ),
-      drawer: DrawerPage(),
+        drawer: DrawerPage(favoritesAccessor()),
       body: body(),
     );
   }
@@ -204,7 +202,9 @@ class RSSDemoState extends State<RSSDemo> {
   TextField get buildSearchField {
     return TextField(
       controller: searchController,
-      decoration: InputDecoration(hintText: "Ara...", border: InputBorder.none),
+      decoration: InputDecoration(
+          hintText: "Buradan haber arayabilirsiniz...",
+          border: InputBorder.none),
       //   onSubmitted: (String keyword) => viewModel.loadNews(keyword),
     );
   }
