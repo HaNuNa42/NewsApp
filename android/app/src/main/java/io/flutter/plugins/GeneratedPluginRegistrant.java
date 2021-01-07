@@ -25,5 +25,6 @@ public final class GeneratedPluginRegistrant {
       com.shekarmudaliyar.social_share.SocialSharePlugin.registerWith(shimPluginRegistry.registrarFor("com.shekarmudaliyar.social_share.SocialSharePlugin"));
     flutterEngine.getPlugins().add(new com.tekartik.sqflite.SqflitePlugin());
     flutterEngine.getPlugins().add(new io.flutter.plugins.urllauncher.UrlLauncherPlugin());
+    flutterEngine.getPlugins().add(new io.flutter.plugins.webviewflutter.WebViewFlutterPlugin());
   }
 }
